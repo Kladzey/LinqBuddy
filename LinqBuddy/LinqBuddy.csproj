@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>Kladzey.LinqBuddy</AssemblyName>
+    <RootNamespace>Kladzey.LinqBuddy</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="LambdaExpressionExtensions.codegen.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LambdaExpressionExtensions.codegen.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="LambdaExpressionExtensions.codegen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LambdaExpressionExtensions.codegen.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

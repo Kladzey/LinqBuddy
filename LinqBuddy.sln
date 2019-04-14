@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqBuddy", "LinqBuddy\LinqBuddy.csproj", "{887E6346-1325-43E0-9918-FBD7D278F0A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqBuddy.Tests", "LinqBuddy.Tests\LinqBuddy.Tests.csproj", "{224779EA-E568-4D75-AA6E-985357B70973}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFBD9B24-572A-4479-9B5F-E964F9C2E7F4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{887E6346-1325-43E0-9918-FBD7D278F0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{887E6346-1325-43E0-9918-FBD7D278F0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{887E6346-1325-43E0-9918-FBD7D278F0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{887E6346-1325-43E0-9918-FBD7D278F0A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{224779EA-E568-4D75-AA6E-985357B70973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{224779EA-E568-4D75-AA6E-985357B70973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{224779EA-E568-4D75-AA6E-985357B70973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{224779EA-E568-4D75-AA6E-985357B70973}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {574CD133-2B56-494C-83D3-4C9108459936}
+	EndGlobalSection
+EndGlobal
