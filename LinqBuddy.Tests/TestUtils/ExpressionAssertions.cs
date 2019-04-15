@@ -5,7 +5,7 @@ using FluentAssertions.Primitives;
 
 namespace Kladzey.LinqBuddy.Tests.TestUtils
 {
-    public class ExpressionAssertions<TDelegate> : ReferenceTypeAssertions<Expression<TDelegate>, ExpressionAssertions<TDelegate>>
+    internal class ExpressionAssertions<TDelegate> : ReferenceTypeAssertions<Expression<TDelegate>, ExpressionAssertions<TDelegate>>
     {
         public ExpressionAssertions(Expression<TDelegate> subject)
         {
