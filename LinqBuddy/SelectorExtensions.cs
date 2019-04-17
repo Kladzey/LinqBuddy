@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Selector extensions.
+    /// </summary>
     public static class SelectorExtensions
     {
         /// <summary>

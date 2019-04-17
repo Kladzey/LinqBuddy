@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Extensions for collections of lambda expressions.
+    /// </summary>
     public static class LambdaExpressionsCollectionExtensions
     {
-        public static IEnumerable<Expression> SelectBodiesWithUnitedParameters<T1, TResult>(this IEnumerable<Expression<Func<T1, TResult>>> expressions)
+        /// <summary>
+        /// Select bodies of expressions with parameters replacement to one set.
+        /// </summary>
+        /// <typeparam name="TDelegate">Type of delegate.</typeparam>
+        /// <param name="expressions">Sequence of expressions.</param>
+        /// <returns>Bodies of expressions with parameters replacement to one set.</returns>
+        public static IEnumerable<Expression> SelectBodiesWithUnitedParameters<TDelegate>(this IEnumerable<Expression<TDelegate>> expressions)
         {
             if (expressions == null)
             {
@@ -20,12 +30,12 @@ namespace Kladzey.LinqBuddy
                     yield break;
                 }
 
-                var firstParameters = enumerator.Current.Parameters[0];
+                var firstParameters = enumerator.Current.Parameters;
                 yield return enumerator.Current.Body;
                 while (enumerator.MoveNext())
                 {
-                    yield return enumerator.Current.Body
-                        .ReplaceParameter(enumerator.Current.Parameters[0], firstParameters);
+                    var replacement = enumerator.Current.Parameters.ZipToDictionary(firstParameters.Cast<Expression>());
+                    yield return enumerator.Current.Body.ReplaceParameters(replacement);
                 }
             }
         }

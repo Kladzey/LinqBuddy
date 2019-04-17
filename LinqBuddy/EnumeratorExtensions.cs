@@ -4,13 +4,26 @@ using System.Collections.Generic;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Enumerator extensions.
+    /// </summary>
     public static class EnumeratorExtensions
     {
-        public static EnumerableAdapter<T> ToEnumerable<T>(this IEnumerator<T> enumerator)
+        /// <summary>
+        /// Create <see cref="IEnumerable{T}"/> wrapper for <see cref="IEnumerator{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to enumerate.</typeparam>
+        /// <param name="enumerator">The enumerator to wrap.</param>
+        /// <returns><see cref="EnumerableAdapter{T}"/>.</returns>
+        public static EnumerableAdapter<T> AsEnumerable<T>(this IEnumerator<T> enumerator)
         {
             return new EnumerableAdapter<T>(enumerator ?? throw new ArgumentNullException(nameof(enumerator)));
         }
 
+        /// <summary>
+        /// <see cref="IEnumerable{T}"/> wrapper for <see cref="IEnumerator{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to enumerate.</typeparam>
         public class EnumerableAdapter<T> : IEnumerable<T>, IDisposable
         {
             private readonly IEnumerator<T> _enumerator;
@@ -59,9 +72,7 @@ namespace Kladzey.LinqBuddy
                 {
                     if (_enumerableAdapter._isDisposed)
                     {
-                        throw new ObjectDisposedException(
-                            nameof(_enumerableAdapter),
-                            "This enumerator can be enumerated only once.");
+                        throw new ObjectDisposedException("This enumerator can be enumerated only once.", (Exception)null);
                     }
 
                     return _enumerableAdapter._enumerator.MoveNext();

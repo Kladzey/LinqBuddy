@@ -33,7 +33,8 @@ namespace Kladzey.LinqBuddy.Visitors
                     default:
                         throw new NotSupportedException("Only captured fields are supported.");
                 }
-                var replacement = calledExpression.Parameters.Zip(node.Arguments.Skip(1), (l, r) => new { l, r }).ToDictionary(x => x.l, x => x.r);
+
+                var replacement = calledExpression.Parameters.ZipToDictionary(node.Arguments.Skip(1));
                 return Visit(calledExpression.Body.ReplaceParameters(replacement));
             }
             return base.VisitMethodCall(node);

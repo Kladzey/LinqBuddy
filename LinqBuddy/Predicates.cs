@@ -3,6 +3,9 @@ using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Predicates.
+    /// </summary>
     public static class Predicates
     {
         /// <summary>

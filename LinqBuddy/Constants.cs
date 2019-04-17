@@ -2,6 +2,9 @@
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Constant expressions.
+    /// </summary>
     public class Constants
     {
         /// <summary>

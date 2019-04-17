@@ -46,7 +46,7 @@ namespace Kladzey.LinqBuddy.Tests
             // Then
             act.Should()
                 .Throw<ObjectDisposedException>()
-                .WithMessage("This enumerator can be enumerated only once.\r\nObject name: '_enumerableAdapter'.");
+                .WithMessage("This enumerator can be enumerated only once.");
         }
     }
 }

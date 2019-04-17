@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Enumerable extensions.
+    /// </summary>
     public static class EnumerableExtensions
     {
         /// <summary>
@@ -28,14 +31,16 @@ namespace Kladzey.LinqBuddy
                 {
                     return false;
                 }
+
                 action(collection);
                 return true;
             }
+
             using (var enumerator = source.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
-                    using (var enumerableAdapter = enumerator.ToEnumerable())
+                    using (var enumerableAdapter = enumerator.AsEnumerable())
                     {
                         action(enumerableAdapter.Prepend(enumerator.Current));
                     }
@@ -43,7 +48,25 @@ namespace Kladzey.LinqBuddy
                     return true;
                 }
             }
+
             return false;
+        }
+
+        internal static Dictionary<TFirst, TSecond> ZipToDictionary<TFirst, TSecond>(
+            this IEnumerable<TFirst> first,
+            IEnumerable<TSecond> second)
+        {
+            var result = new Dictionary<TFirst, TSecond>();
+            using (var firstEnumerator = first.GetEnumerator())
+            using (var secondEnumerator = second.GetEnumerator())
+            {
+                while (firstEnumerator.MoveNext() && secondEnumerator.MoveNext())
+                {
+                    result.Add(firstEnumerator.Current, secondEnumerator.Current);
+                }
+            }
+
+            return result;
         }
     }
 }

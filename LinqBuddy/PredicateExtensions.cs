@@ -3,8 +3,18 @@ using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Predicate extensions.
+    /// </summary>
     public static class PredicateExtensions
     {
+        /// <summary>
+        /// And.
+        /// </summary>
+        /// <typeparam name="T">Type of argument.</typeparam>
+        /// <param name="left">Left predicate.</param>
+        /// <param name="right">Right predicate.</param>
+        /// <returns>And combination of predicates.</returns>
         public static Expression<Func<T, bool>> And<T>(
             this Expression<Func<T, bool>> left,
             Expression<Func<T, bool>> right)
@@ -23,6 +33,13 @@ namespace Kladzey.LinqBuddy
             return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left.Body, replaced), left.Parameters);
         }
 
+        /// <summary>
+        /// Or.
+        /// </summary>
+        /// <typeparam name="T">Type of argument.</typeparam>
+        /// <param name="left">Left predicate.</param>
+        /// <param name="right">Right predicate.</param>
+        /// <returns>Or combination of predicates.</returns>
         public static Expression<Func<T, bool>> Or<T>(
             this Expression<Func<T, bool>> left,
             Expression<Func<T, bool>> right)

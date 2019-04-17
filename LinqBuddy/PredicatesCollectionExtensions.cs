@@ -5,8 +5,17 @@ using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Extensions for collections of predicates.
+    /// </summary>
     public static class PredicatesCollectionExtensions
     {
+        /// <summary>
+        /// And.
+        /// </summary>
+        /// <typeparam name="T">Type of parameter.</typeparam>
+        /// <param name="predicates">Sequence of predicates.</param>
+        /// <returns>And combination of predicates.</returns>
         public static Expression<Func<T, bool>> And<T>(this IEnumerable<Expression<Func<T, bool>>> predicates)
         {
             if (predicates == null)
@@ -17,6 +26,12 @@ namespace Kladzey.LinqBuddy
             return Aggregate(predicates, Predicates.True<T>(), Expression.AndAlso);
         }
 
+        /// <summary>
+        /// Or.
+        /// </summary>
+        /// <typeparam name="T">Type of parameter.</typeparam>
+        /// <param name="predicates">Sequence of predicates.</param>
+        /// <returns>Or combination of predicates.</returns>
         public static Expression<Func<T, bool>> Or<T>(this IEnumerable<Expression<Func<T, bool>>> predicates)
         {
             if (predicates == null)
@@ -42,7 +57,7 @@ namespace Kladzey.LinqBuddy
                 var first = enumerator.Current;
 
                 var expression = enumerator
-                    .ToEnumerable()
+                    .AsEnumerable()
                     .Prepend(first)
                     .SelectBodiesWithUnitedParameters()
                     .Aggregate(aggregateSelector);

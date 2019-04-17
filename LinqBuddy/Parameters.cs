@@ -2,18 +2,36 @@
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Default parameters.
+    /// </summary>
     public static class Parameters
     {
+        /// <summary>
+        /// X parameter.
+        /// </summary>
+        /// <typeparam name="T">Type of parameter.</typeparam>
+        /// <returns><see cref="ParameterExpression"/>.</returns>
         public static ParameterExpression X<T>()
         {
             return ParametersInstances<T>.X;
         }
 
+        /// <summary>
+        /// Y parameter.
+        /// </summary>
+        /// <typeparam name="T">Type of parameter.</typeparam>
+        /// <returns><see cref="ParameterExpression"/>.</returns>
         public static ParameterExpression Y<T>()
         {
             return ParametersInstances<T>.Y;
         }
 
+        /// <summary>
+        /// Z parameter.
+        /// </summary>
+        /// <typeparam name="T">Type of parameter.</typeparam>
+        /// <returns><see cref="ParameterExpression"/>.</returns>
         public static ParameterExpression Z<T>()
         {
             return ParametersInstances<T>.Z;

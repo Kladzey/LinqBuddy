@@ -4,8 +4,17 @@ using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
 {
+    /// <summary>
+    /// Extensions for collections of expressions.
+    /// </summary>
     public static class ExpressionsCollectionExtensions
     {
+        /// <summary>
+        /// Aggregate expressions.
+        /// </summary>
+        /// <param name="expressions">A sequence that contains expressions to be aggregated.</param>
+        /// <param name="aggregateSelector">Selector what combines two expressions in one.</param>
+        /// <returns>Aggregated expression.</returns>
         public static Expression Aggregate(this IEnumerable<Expression> expressions, Func<Expression, Expression, Expression> aggregateSelector)
         {
             if (expressions == null)
@@ -57,7 +66,7 @@ namespace Kladzey.LinqBuddy
             }
         }
 
-        internal static int CountZeroBits(int number)
+        private static int CountZeroBits(int number)
         {
             var result = 0;
             while ((number & 1) == 0)
