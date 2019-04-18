@@ -57,10 +57,10 @@ namespace Kladzey.LinqBuddy
                 var first = enumerator.Current;
 
                 var expression = enumerator
-                    .AsEnumerable()
+                    .AsEnumerableInternal()
                     .Prepend(first)
-                    .SelectBodiesWithUnitedParameters()
-                    .Aggregate(aggregateSelector);
+                    .SelectBodiesWithUnitedParametersInternal()
+                    .AggregateInternal(aggregateSelector);
 
                 return Expression.Lambda<Func<T, bool>>(expression, first.Parameters);
             }

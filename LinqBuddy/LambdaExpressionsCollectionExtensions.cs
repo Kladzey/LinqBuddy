@@ -23,6 +23,11 @@ namespace Kladzey.LinqBuddy
                 throw new ArgumentNullException(nameof(expressions));
             }
 
+            return expressions.SelectBodiesWithUnitedParametersInternal();
+        }
+
+        internal static IEnumerable<Expression> SelectBodiesWithUnitedParametersInternal<TDelegate>(this IEnumerable<Expression<TDelegate>> expressions)
+        {
             using (var enumerator = expressions.GetEnumerator())
             {
                 if (!enumerator.MoveNext())

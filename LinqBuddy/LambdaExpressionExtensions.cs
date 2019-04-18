@@ -16,11 +16,6 @@ namespace Kladzey.LinqBuddy
         /// <returns>Expression with inlined calls.</returns>
         public static Expression<TDelegate> InlineCalls<TDelegate>(this Expression<TDelegate> expression)
         {
-            if (expression == null)
-            {
-                throw new System.ArgumentNullException(nameof(expression));
-            }
-
             return (Expression<TDelegate>)InlineCallsVisitor.Instance.Visit(expression);
         }
     }

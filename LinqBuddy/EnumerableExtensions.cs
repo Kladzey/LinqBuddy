@@ -40,7 +40,7 @@ namespace Kladzey.LinqBuddy
             {
                 if (enumerator.MoveNext())
                 {
-                    using (var enumerableAdapter = enumerator.AsEnumerable())
+                    using (var enumerableAdapter = enumerator.AsEnumerableInternal())
                     {
                         action(enumerableAdapter.Prepend(enumerator.Current));
                     }

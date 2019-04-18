@@ -27,6 +27,11 @@ namespace Kladzey.LinqBuddy
                 throw new ArgumentNullException(nameof(aggregateSelector));
             }
 
+            return expressions.AggregateInternal(aggregateSelector);
+        }
+
+        internal static Expression AggregateInternal(this IEnumerable<Expression> expressions, Func<Expression, Expression, Expression> aggregateSelector)
+        {
             var stack = new Stack<Expression>();
             using (var enumerator = expressions.GetEnumerator())
             {
