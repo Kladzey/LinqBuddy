@@ -11,6 +11,23 @@ namespace Kladzey.LinqBuddy.Tests
         private static readonly Expression<Func<double, double>> sqr = x => x * x;
 
         [Fact]
+        public void InlineCallsExpressionAttributeTest()
+        {
+            // Given
+            Expression<Func<int, int, int>> expression = (x, y) => new TestObject { X = x, Y = y }.Sum;
+
+            // When
+            var result = expression.InlineCalls();
+
+            // Then
+            using (new AssertionScope())
+            {
+                result.Should().Equal((x, y) => new TestObject { X = x, Y = y }.X + new TestObject { X = x, Y = y }.Y);
+                result.Call(1, 2).Should().Be(3);
+            }
+        }
+
+        [Fact]
         public void InlineCallsTest()
         {
             // Given
@@ -26,6 +43,18 @@ namespace Kladzey.LinqBuddy.Tests
                 result.Should().Equal((x1, y1, x2, y2) => Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
                 result.Call(1, -1, 4, 3).Should().BeApproximately(5, 1e-5);
             }
+        }
+
+        internal class TestObject
+        {
+            public static readonly Expression<Func<TestObject, int>> SumExpression = t => t.X + t.Y;
+
+            [Expression(nameof(SumExpression))]
+            public int Sum => throw new NotSupportedException();
+
+            public int X { get; set; }
+
+            public int Y { get; set; }
         }
     }
 }
