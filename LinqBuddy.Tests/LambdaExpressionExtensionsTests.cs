@@ -8,13 +8,14 @@ namespace Kladzey.LinqBuddy.Tests
 {
     public class LambdaExpressionExtensionsTests
     {
+        public static readonly Expression<Func<TestObject, int, int>> Sum3Expression = (t, i) => t.Sum + i;
         private static readonly Expression<Func<double, double>> sqr = x => x * x;
 
         [Fact]
         public void InlineCallsExpressionAttributeTest()
         {
             // Given
-            Expression<Func<int, int, int>> expression = (x, y) => new TestObject { X = x, Y = y }.Sum;
+            Expression<Func<int, int, int, int>> expression = (x, y, z) => new TestObject { X = x, Y = y }.Sum3(z);
 
             // When
             var result = expression.InlineCalls();
@@ -22,8 +23,9 @@ namespace Kladzey.LinqBuddy.Tests
             // Then
             using (new AssertionScope())
             {
-                result.Should().Equal((x, y) => new TestObject { X = x, Y = y }.X + new TestObject { X = x, Y = y }.Y);
-                result.Call(1, 2).Should().Be(3);
+                result.Should()
+                    .Equal((x, y, z) => new TestObject { X = x, Y = y }.X + new TestObject { X = x, Y = y }.Y + z);
+                result.Call(1, 2, 3).Should().Be(6);
             }
         }
 
@@ -32,7 +34,8 @@ namespace Kladzey.LinqBuddy.Tests
         {
             // Given
             Expression<Func<double, double, double>> length = (x, y) => Math.Sqrt(sqr.Call(x) + sqr.Call(y));
-            Expression<Func<double, double, double, double, double>> distance = (x1, y1, x2, y2) => length.Call(x2 - x1, y2 - y1);
+            Expression<Func<double, double, double, double, double>> distance = (x1, y1, x2, y2) =>
+                length.Call(x2 - x1, y2 - y1);
 
             // When
             var result = distance.InlineCalls();
@@ -45,7 +48,7 @@ namespace Kladzey.LinqBuddy.Tests
             }
         }
 
-        internal class TestObject
+        public class TestObject
         {
             public static readonly Expression<Func<TestObject, int>> SumExpression = t => t.X + t.Y;
 
@@ -55,6 +58,9 @@ namespace Kladzey.LinqBuddy.Tests
             public int X { get; set; }
 
             public int Y { get; set; }
+
+            [Expression(nameof(Sum3Expression), typeof(LambdaExpressionExtensionsTests))]
+            public int Sum3(int i) => throw new NotSupportedException();
         }
     }
 }

@@ -7,15 +7,18 @@ namespace Kladzey.LinqBuddy
     /// <summary>
     /// Put this attribute on member if you want to replace it with expression.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
     public class ExpressionAttribute : Attribute
     {
         /// <summary>
         /// Ctor.
         /// </summary>
         /// <param name="memberName">Name of member with expression. It should be public static filed or property.</param>
-        public ExpressionAttribute(string memberName)
+        /// <param name="type">Specify type if member is not in declaring type.</param>
+        public ExpressionAttribute(string memberName, Type type = null)
         {
             MemberName = memberName;
+            Type = type;
         }
 
         /// <summary>
@@ -24,9 +27,9 @@ namespace Kladzey.LinqBuddy
         public string MemberName { get; }
 
         /// <summary>
-        /// Speify type if member is not in declaring type.
+        /// Type what contains member.
         /// </summary>
-        public Type Type { get; set; }
+        public Type Type { get;  }
 
         /// <summary>
         /// Get expression.

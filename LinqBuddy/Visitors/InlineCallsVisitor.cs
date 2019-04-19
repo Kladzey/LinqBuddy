@@ -20,30 +20,60 @@ namespace Kladzey.LinqBuddy.Visitors
             {
                 return VisitExpressionAttribute(node, expressionAttribute);
             }
+
             return base.VisitMember(node);
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.Name == nameof(LambdaExpressionExtensions.Call) && node.Method.DeclaringType == typeof(LambdaExpressionExtensions))
+            if (node.Method.Name == nameof(LambdaExpressionExtensions.Call) &&
+                node.Method.DeclaringType == typeof(LambdaExpressionExtensions))
             {
                 return VisitExpressionCall(node);
             }
+
+            var expressionAttribute = node.Method.GetCustomAttribute<ExpressionAttribute>();
+            if (expressionAttribute != null)
+            {
+                return VisitExpressionAttribute(node, expressionAttribute);
+            }
+
             return base.VisitMethodCall(node);
         }
 
-        private static Expression VisitExpressionAttribute(MemberExpression node, ExpressionAttribute expressionAttribute)
+        private  Expression VisitExpressionAttribute(MemberExpression node,
+            ExpressionAttribute expressionAttribute)
         {
             var expression = expressionAttribute.GetExpression(node.Member.DeclaringType);
             if (expression == null)
             {
                 throw new InvalidOperationException("Expression is not found.");
             }
+
             if (expression.Parameters.Count != 1)
             {
                 throw new InvalidOperationException("Expression has invalid amount of parameters.");
             }
-            return expression.Body.ReplaceParameter(expression.Parameters[0], node.Expression);
+
+            return Visit(expression.Body.ReplaceParameter(expression.Parameters[0], node.Expression));
+        }
+
+        private Expression VisitExpressionAttribute(MethodCallExpression node, ExpressionAttribute expressionAttribute)
+        {
+            var expression = expressionAttribute.GetExpression(node.Method.DeclaringType);
+            if (expression == null)
+            {
+                throw new InvalidOperationException("Expression is not found.");
+            }
+
+            if (expression.Parameters.Count != node.Arguments.Count + 1)
+            {
+                throw new InvalidOperationException("Expression has invalid amount of parameters.");
+            }
+
+            return Visit(
+                expression.Body.ReplaceParameters(
+                    expression.Parameters.ZipToDictionary(node.Arguments.Prepend(node.Object))));
         }
 
         private Expression VisitExpressionCall(MethodCallExpression node)
@@ -52,12 +82,12 @@ namespace Kladzey.LinqBuddy.Visitors
             switch (node.Arguments[0])
             {
                 case MemberExpression memberExpression
-                when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is ConstantExpression constantExpression:
+                    when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is ConstantExpression constantExpression:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(constantExpression.Value);
                     break;
 
                 case MemberExpression memberExpression
-                when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is null:
+                    when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is null:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(null);
                     break;
 
