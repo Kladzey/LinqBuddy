@@ -12,24 +12,6 @@ namespace Kladzey.LinqBuddy.Tests
         private static readonly Expression<Func<double, double>> sqr = x => x * x;
 
         [Fact]
-        public void InlineCallsExpressionAttributeTest()
-        {
-            // Given
-            Expression<Func<int, int, int, int>> expression = (x, y, z) => new TestObject { X = x, Y = y }.Sum3(z);
-
-            // When
-            var result = expression.InlineCalls();
-
-            // Then
-            using (new AssertionScope())
-            {
-                result.Should()
-                    .Equal((x, y, z) => new TestObject { X = x, Y = y }.X + new TestObject { X = x, Y = y }.Y + z);
-                result.Call(1, 2, 3).Should().Be(6);
-            }
-        }
-
-        [Fact]
         public void InlineCallsTest()
         {
             // Given
@@ -48,18 +30,36 @@ namespace Kladzey.LinqBuddy.Tests
             }
         }
 
+        [Fact]
+        public void InlineCallsWithCallAttributeTest()
+        {
+            // Given
+            Expression<Func<int, int, int, int>> expression = (x, y, z) => new TestObject { X = x, Y = y }.Sum3(z);
+
+            // When
+            var result = expression.InlineCalls();
+
+            // Then
+            using (new AssertionScope())
+            {
+                result.Should()
+                    .Equal((x, y, z) => new TestObject { X = x, Y = y }.X + new TestObject { X = x, Y = y }.Y + z);
+                result.Call(1, 2, 3).Should().Be(6);
+            }
+        }
+
         public class TestObject
         {
             public static readonly Expression<Func<TestObject, int>> SumExpression = t => t.X + t.Y;
 
-            [Expression(nameof(SumExpression))]
+            [Call(nameof(SumExpression))]
             public int Sum => throw new NotSupportedException();
 
             public int X { get; set; }
 
             public int Y { get; set; }
 
-            [Expression(nameof(Sum3Expression), typeof(LambdaExpressionExtensionsTests))]
+            [Call(nameof(Sum3Expression), typeof(LambdaExpressionExtensionsTests))]
             public int Sum3(int i) => throw new NotSupportedException();
         }
     }

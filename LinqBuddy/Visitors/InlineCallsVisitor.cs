@@ -15,10 +15,10 @@ namespace Kladzey.LinqBuddy.Visitors
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            var expressionAttribute = node.Member.GetCustomAttribute<ExpressionAttribute>();
+            var expressionAttribute = node.Member.GetCustomAttribute<CallAttribute>();
             if (expressionAttribute != null)
             {
-                return VisitExpressionAttribute(node, expressionAttribute);
+                return VisitCallAttribute(node, expressionAttribute);
             }
 
             return base.VisitMember(node);
@@ -32,17 +32,17 @@ namespace Kladzey.LinqBuddy.Visitors
                 return VisitExpressionCall(node);
             }
 
-            var expressionAttribute = node.Method.GetCustomAttribute<ExpressionAttribute>();
+            var expressionAttribute = node.Method.GetCustomAttribute<CallAttribute>();
             if (expressionAttribute != null)
             {
-                return VisitExpressionAttribute(node, expressionAttribute);
+                return VisitCallAttribute(node, expressionAttribute);
             }
 
             return base.VisitMethodCall(node);
         }
 
-        private  Expression VisitExpressionAttribute(MemberExpression node,
-            ExpressionAttribute expressionAttribute)
+        private Expression VisitCallAttribute(MemberExpression node,
+            CallAttribute expressionAttribute)
         {
             var expression = expressionAttribute.GetExpression(node.Member.DeclaringType);
             if (expression == null)
@@ -58,7 +58,7 @@ namespace Kladzey.LinqBuddy.Visitors
             return Visit(expression.Body.ReplaceParameter(expression.Parameters[0], node.Expression));
         }
 
-        private Expression VisitExpressionAttribute(MethodCallExpression node, ExpressionAttribute expressionAttribute)
+        private Expression VisitCallAttribute(MethodCallExpression node, CallAttribute expressionAttribute)
         {
             var expression = expressionAttribute.GetExpression(node.Method.DeclaringType);
             if (expression == null)
