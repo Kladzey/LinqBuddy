@@ -8,7 +8,7 @@ namespace Kladzey.LinqBuddy.Tests
 {
     public class LambdaExpressionExtensionsTests
     {
-        public static readonly Expression<Func<TestObject, int, int>> Sum3Expression = (t, i) => t.Sum + i;
+        public static readonly Expression<Func<TestObject, int, int>> TestObjectCallxpression = (t, i) => t.Sum + i;
         private static readonly Expression<Func<double, double>> sqr = x => x * x;
 
         [Fact]
@@ -31,10 +31,40 @@ namespace Kladzey.LinqBuddy.Tests
         }
 
         [Fact]
+        public void InlineCallsWithCallAttributeShouldThrowExceptionIfExpressionIsNotFoundTest()
+        {
+            // Given
+            Expression<Func<int>> expression = () => new TestObject().NotFound;
+
+            // When
+            Action act = () => expression.InlineCalls();
+
+            // Then
+            act.Should()
+                .Throw<InvalidOperationException>()
+                .WithMessage("Expression is not found.");
+        }
+
+        [Fact]
+        public void InlineCallsWithCallAttributeShouldThrowExceptionIfParametersAreWrongTest()
+        {
+            // Given
+            Expression<Func<int>> expression = () => new TestObject().InvalidParameters;
+
+            // When
+            Action act = () => expression.InlineCalls();
+
+            // Then
+            act.Should()
+                .Throw<InvalidOperationException>()
+                .WithMessage("Expression has invalid amount of parameters.");
+        }
+
+        [Fact]
         public void InlineCallsWithCallAttributeTest()
         {
             // Given
-            Expression<Func<int, int, int, int>> expression = (x, y, z) => new TestObject { X = x, Y = y }.Sum3(z);
+            Expression<Func<int, int, int, int>> expression = (x, y, z) => new TestObject { X = x, Y = y }.Call(z);
 
             // When
             var result = expression.InlineCalls();
@@ -52,6 +82,12 @@ namespace Kladzey.LinqBuddy.Tests
         {
             public static readonly Expression<Func<TestObject, int>> SumExpression = t => t.X + t.Y;
 
+            [Call(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
+            public int InvalidParameters => throw new NotSupportedException();
+
+            [Call("NotFound")]
+            public int NotFound => throw new NotSupportedException();
+
             [Call(nameof(SumExpression))]
             public int Sum => throw new NotSupportedException();
 
@@ -59,8 +95,8 @@ namespace Kladzey.LinqBuddy.Tests
 
             public int Y { get; set; }
 
-            [Call(nameof(Sum3Expression), typeof(LambdaExpressionExtensionsTests))]
-            public int Sum3(int i) => throw new NotSupportedException();
+            [Call(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
+            public int Call(int i) => throw new NotSupportedException();
         }
     }
 }

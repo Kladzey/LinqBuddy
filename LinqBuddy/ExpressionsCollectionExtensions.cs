@@ -37,7 +37,7 @@ namespace Kladzey.LinqBuddy
             {
                 if (!enumerator.MoveNext())
                 {
-                    throw new ArgumentException("Expressions is empty", nameof(expressions));
+                    throw new ArgumentException("Expressions is empty.", nameof(expressions));
                 }
 
                 var first = enumerator.Current;

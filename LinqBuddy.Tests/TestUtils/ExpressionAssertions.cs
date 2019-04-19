@@ -24,5 +24,16 @@ namespace Kladzey.LinqBuddy.Tests.TestUtils
 
             return new AndConstraint<ExpressionAssertions<TDelegate>>(this);
         }
+
+        public AndConstraint<ExpressionAssertions<TDelegate>> Equal(string expected, string because = "", params object[] becauseArgs)
+        {
+            Execute.Assertion
+                .BecauseOf(because, becauseArgs)
+                .Given(() => Subject)
+                .ForCondition(s => s.ToString() == expected)
+                .FailWith("Expected {context:expression} to equal {0}{reason}, but found {1}.", expected, Subject);
+
+            return new AndConstraint<ExpressionAssertions<TDelegate>>(this);
+        }
     }
 }
