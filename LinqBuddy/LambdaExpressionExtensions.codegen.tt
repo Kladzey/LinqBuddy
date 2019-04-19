@@ -13,7 +13,7 @@ namespace Kladzey.LinqBuddy
     var argRange = Enumerable.Range(1, i); 
     var generics = string.Concat(argRange.Select(j => $"T{j}, ")) + "TResult"; #>
         /// <summary>
-        /// Call expression.
+        /// Call expression with <#= i #> arguments.
         /// </summary>
 <# for (var j = 0; j < i; ++j) { #>
         /// <typeparam name="T<#= j + 1 #>">The type of argument <#= j + 1 #>.</typeparam>
@@ -26,6 +26,10 @@ namespace Kladzey.LinqBuddy
         /// <returns>Result.</returns>
         public static TResult Call<<#= generics #>>(this Expression<Func<<#= generics #>>> expression<#= string.Concat(argRange.Select(j => $", T{j} arg{j}")) #>)
         {
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
             return expression.Compile().Invoke(<#= string.Join(", ", argRange.Select(j => $"arg{j}")) #>);
         }
 
