@@ -14,6 +14,7 @@ namespace Kladzey.LinqBuddy.Tests
             new TheoryData<IEnumerable<int>> {
                 Enumerable.Empty<int>(),
                 Array.Empty<int>(),
+                Enumerable.Range(1, 0),
             };
 
         [Fact]
