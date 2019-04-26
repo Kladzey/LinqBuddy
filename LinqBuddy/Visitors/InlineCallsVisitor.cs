@@ -16,7 +16,7 @@ namespace Kladzey.LinqBuddy.Visitors
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            var expressionAttribute = node.Member.GetCustomAttribute<CallAttribute>();
+            var expressionAttribute = node.Member.GetCustomAttribute<CallExpressionAttribute>();
             if (expressionAttribute != null)
             {
                 return VisitCallAttribute(node, expressionAttribute);
@@ -33,7 +33,7 @@ namespace Kladzey.LinqBuddy.Visitors
                 return VisitExpressionCall(node);
             }
 
-            var expressionAttribute = node.Method.GetCustomAttribute<CallAttribute>();
+            var expressionAttribute = node.Method.GetCustomAttribute<CallExpressionAttribute>();
             if (expressionAttribute != null)
             {
                 return VisitCallAttribute(node, expressionAttribute);
@@ -42,19 +42,19 @@ namespace Kladzey.LinqBuddy.Visitors
             return base.VisitMethodCall(node);
         }
 
-        private Expression VisitCallAttribute(MemberExpression node, CallAttribute expressionAttribute)
+        private Expression VisitCallAttribute(MemberExpression node, CallExpressionAttribute callExpressionAttribute)
         {
-            return VisitCallAttribute(expressionAttribute, node.Member.DeclaringType, new[] { node.Expression });
+            return VisitCallAttribute(callExpressionAttribute, node.Member, new[] { node.Expression });
         }
 
-        private Expression VisitCallAttribute(MethodCallExpression node, CallAttribute expressionAttribute)
+        private Expression VisitCallAttribute(MethodCallExpression node, CallExpressionAttribute callExpressionAttribute)
         {
-            return VisitCallAttribute(expressionAttribute, node.Method.DeclaringType, node.Arguments.Prepend(node.Object));
+            return VisitCallAttribute(callExpressionAttribute, node.Method, node.Arguments.Prepend(node.Object));
         }
 
-        private Expression VisitCallAttribute(CallAttribute callAttribute, Type declaringType, IEnumerable<Expression> arguments)
+        private Expression VisitCallAttribute(CallExpressionAttribute callExpressionAttribute, MemberInfo memberInfo, IEnumerable<Expression> arguments)
         {
-            var expression = callAttribute.GetExpression(declaringType);
+            var expression = callExpressionAttribute.GetExpression(memberInfo);
             if (expression == null)
             {
                 throw new InvalidOperationException("Expression is not found.");

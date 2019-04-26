@@ -82,20 +82,20 @@ namespace Kladzey.LinqBuddy.Tests
         {
             public static readonly Expression<Func<TestObject, int>> SumExpression = t => t.X + t.Y;
 
-            [Call(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
+            [CallExpression(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
             public int InvalidParameters => throw new NotSupportedException();
 
-            [Call("NotFound")]
+            [CallExpression("NotFound")]
             public int NotFound => throw new NotSupportedException();
 
-            [Call(nameof(SumExpression))]
+            [CallExpression]
             public int Sum => throw new NotSupportedException();
 
             public int X { get; set; }
 
             public int Y { get; set; }
 
-            [Call(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
+            [CallExpression(nameof(TestObjectCallxpression), typeof(LambdaExpressionExtensionsTests))]
             public int Call(int i) => throw new NotSupportedException();
         }
     }
