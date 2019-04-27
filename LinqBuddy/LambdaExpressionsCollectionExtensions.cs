@@ -39,8 +39,7 @@ namespace Kladzey.LinqBuddy
                 yield return enumerator.Current.Body;
                 while (enumerator.MoveNext())
                 {
-                    var replacement = enumerator.Current.Parameters.ZipToDictionary(firstParameters.Cast<Expression>());
-                    yield return enumerator.Current.Body.ReplaceParameters(replacement);
+                    yield return enumerator.Current.Body.ReplaceParameters(enumerator.Current.Parameters, firstParameters.Cast<Expression>());
                 }
             }
         }

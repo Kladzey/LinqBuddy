@@ -57,7 +57,7 @@ namespace Kladzey.LinqBuddy.Tests
             // Then
             act.Should()
                 .Throw<InvalidOperationException>()
-                .WithMessage("Expression has invalid amount of parameters.");
+                .WithMessage("The number of replacements is not equal to the number of parameters.");
         }
 
         [Fact]

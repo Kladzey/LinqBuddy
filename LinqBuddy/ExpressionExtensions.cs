@@ -74,5 +74,53 @@ namespace Kladzey.LinqBuddy
             var visitor = new ReplaceParametersVisitor(newExpressions);
             return visitor.Visit(expression);
         }
+
+        /// <summary>
+        /// Replace multiple parameters by items in <paramref name="newExpressions"/>.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="parameters"></param>
+        /// <param name="replacements"></param>
+        /// <returns>New expression with applied replacement.</returns>
+        public static Expression ReplaceParameters(
+            this Expression expression,
+            IEnumerable<ParameterExpression> parameters,
+            IEnumerable<Expression> replacements)
+        {
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (replacements == null)
+            {
+                throw new ArgumentNullException(nameof(replacements));
+            }
+
+            var newExpressions = new Dictionary<ParameterExpression, Expression>();
+            using (var parametersEnumerator = parameters.GetEnumerator())
+            using (var replacementsEnumerator = replacements.GetEnumerator())
+            {
+                var parametersMoveNext = parametersEnumerator.MoveNext();
+                var replacementsMoveNext = replacementsEnumerator.MoveNext();
+                while (parametersMoveNext && replacementsMoveNext)
+                {
+                    newExpressions.Add(parametersEnumerator.Current, replacementsEnumerator.Current);
+                    parametersMoveNext = parametersEnumerator.MoveNext();
+                    replacementsMoveNext = replacementsEnumerator.MoveNext();
+                }
+                if (parametersMoveNext != replacementsMoveNext)
+                {
+                    throw new InvalidOperationException("The number of replacements is not equal to the number of parameters.");
+                }
+            }
+
+            return new ReplaceParametersVisitor(newExpressions).Visit(expression);
+        }
     }
 }

@@ -44,15 +44,15 @@ namespace Kladzey.LinqBuddy.Visitors
 
         private Expression VisitCallAttribute(MemberExpression node, CallExpressionAttribute callExpressionAttribute)
         {
-            return VisitCallAttribute(callExpressionAttribute, node.Member, new[] { node.Expression });
+            return VisitCallExpressionAttribute(callExpressionAttribute, node.Member, new[] { node.Expression });
         }
 
         private Expression VisitCallAttribute(MethodCallExpression node, CallExpressionAttribute callExpressionAttribute)
         {
-            return VisitCallAttribute(callExpressionAttribute, node.Method, node.Arguments.Prepend(node.Object));
+            return VisitCallExpressionAttribute(callExpressionAttribute, node.Method, node.Arguments.Prepend(node.Object));
         }
 
-        private Expression VisitCallAttribute(CallExpressionAttribute callExpressionAttribute, MemberInfo memberInfo, IEnumerable<Expression> arguments)
+        private Expression VisitCallExpressionAttribute(CallExpressionAttribute callExpressionAttribute, MemberInfo memberInfo, IEnumerable<Expression> arguments)
         {
             var expression = callExpressionAttribute.GetExpression(memberInfo);
             if (expression == null)
@@ -60,14 +60,7 @@ namespace Kladzey.LinqBuddy.Visitors
                 throw new InvalidOperationException("Expression is not found.");
             }
 
-            var newExpressions = expression.Parameters.ZipToDictionary(arguments);
-
-            if (expression.Parameters.Count != newExpressions.Count)
-            {
-                throw new InvalidOperationException("Expression has invalid amount of parameters.");
-            }
-
-            return Visit(expression.Body.ReplaceParameters(newExpressions));
+            return Visit(expression.Body.ReplaceParameters(expression.Parameters, arguments));
         }
 
         private Expression VisitExpressionCall(MethodCallExpression node)
@@ -89,8 +82,7 @@ namespace Kladzey.LinqBuddy.Visitors
                     throw new NotSupportedException("Only captured fields are supported.");
             }
 
-            var replacement = calledExpression.Parameters.ZipToDictionary(node.Arguments.Skip(1));
-            return Visit(calledExpression.Body.ReplaceParameters(replacement));
+            return Visit(calledExpression.Body.ReplaceParameters(calledExpression.Parameters, node.Arguments.Skip(1)));
         }
     }
 }

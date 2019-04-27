@@ -51,22 +51,5 @@ namespace Kladzey.LinqBuddy
 
             return false;
         }
-
-        internal static Dictionary<TFirst, TSecond> ZipToDictionary<TFirst, TSecond>(
-            this IEnumerable<TFirst> first,
-            IEnumerable<TSecond> second)
-        {
-            var result = new Dictionary<TFirst, TSecond>();
-            using (var firstEnumerator = first.GetEnumerator())
-            using (var secondEnumerator = second.GetEnumerator())
-            {
-                while (firstEnumerator.MoveNext() && secondEnumerator.MoveNext())
-                {
-                    result.Add(firstEnumerator.Current, secondEnumerator.Current);
-                }
-            }
-
-            return result;
-        }
     }
 }

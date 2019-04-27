@@ -31,12 +31,7 @@ namespace Kladzey.LinqBuddy
         /// </summary>
         public Type Type { get; }
 
-        /// <summary>
-        /// Get expression.
-        /// </summary>
-        /// <param name="memberInfo">Member where attribute is declared.</param>
-        /// <returns>Lambda expression. <code>null</code> if expression is not found.</returns>
-        public LambdaExpression GetExpression(MemberInfo memberInfo)
+        internal LambdaExpression GetExpression(MemberInfo memberInfo)
         {
             var type = Type ?? memberInfo.DeclaringType;
             var memberName = MemberName ?? (memberInfo.Name + "Expression");
