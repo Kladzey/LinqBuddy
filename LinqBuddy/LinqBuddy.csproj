@@ -15,9 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="LambdaExpressionExtensions.codegen.tt">
+    <None Update="LambdaExpressionExtensions.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LambdaExpressionExtensions.codegen.cs</LastGenOutput>
+      <LastGenOutput>LambdaExpressionExtensions.generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -26,10 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="LambdaExpressionExtensions.codegen.cs">
+    <Compile Update="LambdaExpressionExtensions.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LambdaExpressionExtensions.codegen.tt</DependentUpon>
+      <DependentUpon>LambdaExpressionExtensions.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
