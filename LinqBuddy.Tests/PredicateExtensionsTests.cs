@@ -16,6 +16,15 @@ namespace Kladzey.LinqBuddy.Tests
                 },
             };
 
+        public static TheoryData<Expression<Func<int, bool>>, Expression<Func<int, bool>>> NotTestCases =>
+            new TheoryData<Expression<Func<int, bool>>, Expression<Func<int, bool>>>
+            {
+                {
+                    x => x == 1,
+                    x => !(x == 1)
+                },
+            };
+
         public static TheoryData<Expression<Func<int, bool>>, Expression<Func<int, bool>>, Expression<Func<int, bool>>> OrTestCases =>
             new TheoryData<Expression<Func<int, bool>>, Expression<Func<int, bool>>, Expression<Func<int, bool>>>
             {
@@ -32,6 +41,14 @@ namespace Kladzey.LinqBuddy.Tests
             Expression<Func<int, bool>> expected)
         {
             var result = left.And(right);
+            result.Should().Equal(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(NotTestCases))]
+        public void NotTest(Expression<Func<int, bool>> predicate, Expression<Func<int, bool>> expected)
+        {
+            var result = predicate.Not();
             result.Should().Equal(expected);
         }
 

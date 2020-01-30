@@ -34,6 +34,22 @@ namespace Kladzey.LinqBuddy
         }
 
         /// <summary>
+        /// Not.
+        /// </summary>
+        /// <typeparam name="T">Type of argument.</typeparam>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>Negative predicate.</returns>
+        public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> predicate)
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            return Expression.Lambda<Func<T, bool>>(Expression.Not(predicate.Body), predicate.Parameters);
+        }
+
+        /// <summary>
         /// Or.
         /// </summary>
         /// <typeparam name="T">Type of argument.</typeparam>
