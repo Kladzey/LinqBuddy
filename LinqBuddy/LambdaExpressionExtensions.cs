@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using Kladzey.LinqBuddy.Visitors;
 
 namespace Kladzey.LinqBuddy
@@ -16,7 +17,8 @@ namespace Kladzey.LinqBuddy
         /// <returns>Expression with inlined calls.</returns>
         public static Expression<TDelegate> InlineCalls<TDelegate>(this Expression<TDelegate> expression)
         {
-            return (Expression<TDelegate>)InlineCallsVisitor.Instance.Visit(expression);
+            return (Expression<TDelegate>)InlineCallsVisitor.Instance.Visit(
+                expression ?? throw new ArgumentNullException(nameof(expression)));
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LinqBuddy.Benchmarks": {
+      "commandName": "Project",
+      "commandLineArgs": "--job short"
+    }
+  }
+}

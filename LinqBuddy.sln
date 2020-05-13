@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqBuddy.Benchmarks", "LinqBuddy.Benchmarks\LinqBuddy.Benchmarks.csproj", "{445F75BF-A44B-4CC6-8569-F5115579D68D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{224779EA-E568-4D75-AA6E-985357B70973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{224779EA-E568-4D75-AA6E-985357B70973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{224779EA-E568-4D75-AA6E-985357B70973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445F75BF-A44B-4CC6-8569-F5115579D68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445F75BF-A44B-4CC6-8569-F5115579D68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445F75BF-A44B-4CC6-8569-F5115579D68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445F75BF-A44B-4CC6-8569-F5115579D68D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

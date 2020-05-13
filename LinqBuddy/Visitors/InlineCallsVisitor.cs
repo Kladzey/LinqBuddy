@@ -68,18 +68,21 @@ namespace Kladzey.LinqBuddy.Visitors
             LambdaExpression calledExpression;
             switch (node.Arguments[0])
             {
+                // variable
                 case MemberExpression memberExpression
                     when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is ConstantExpression constantExpression:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(constantExpression.Value);
                     break;
 
+                // static field
                 case MemberExpression memberExpression
                     when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is null:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(null);
                     break;
 
                 default:
-                    throw new NotSupportedException("Only captured fields are supported.");
+                    calledExpression = Expression.Lambda<Func<LambdaExpression>>(node.Arguments[0]).Compile().Invoke();
+                    break;
             }
 
             return Visit(calledExpression.Body.ReplaceParameters(calledExpression.Parameters, node.Arguments.Skip(1)));
