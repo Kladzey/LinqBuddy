@@ -8,7 +8,7 @@ namespace Kladzey.LinqBuddy
     /// Put this attribute on member if you want to replace it with expression.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-    public class CallExpressionAttribute : Attribute
+    public class CallExpressionAttribute : Attribute, IExpressionProvider
     {
         /// <summary>
         /// Ctor.
@@ -31,8 +31,14 @@ namespace Kladzey.LinqBuddy
         /// </summary>
         public Type Type { get; }
 
-        internal LambdaExpression GetExpression(MemberInfo memberInfo)
+        /// <inheritdoc />
+        public LambdaExpression GetExpression(MemberInfo memberInfo)
         {
+            if (memberInfo == null)
+            {
+                throw new ArgumentNullException(nameof(memberInfo));
+            }
+
             var type = Type ?? memberInfo.DeclaringType;
             var memberName = MemberName ?? (memberInfo.Name + "Expression");
 
@@ -42,12 +48,9 @@ namespace Kladzey.LinqBuddy
             {
                 return (LambdaExpression)fieldInfo.GetValue(null);
             }
+
             var propertyInfo = typeInfo.GetProperty(memberName, BindingFlags.Public | BindingFlags.Static);
-            if (propertyInfo != null)
-            {
-                return (LambdaExpression)propertyInfo.GetValue(null);
-            }
-            return null;
+            return (LambdaExpression) propertyInfo?.GetValue(null);
         }
     }
 }
