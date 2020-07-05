@@ -19,11 +19,13 @@ namespace Kladzey.LinqBuddy.Adapters
             _enumerator = enumerator;
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             _isDisposed = true;
         }
 
+        /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
         {
             return new EnumeratorWrapper(this);

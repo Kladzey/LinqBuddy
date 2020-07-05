@@ -20,6 +20,11 @@ namespace Kladzey.LinqBuddy
             this IEnumerable<TSource> source,
             Action<IEnumerable<TSource>> action)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
             {
                 throw new ArgumentNullException(nameof(action));
@@ -38,18 +43,18 @@ namespace Kladzey.LinqBuddy
 
             using (var enumerator = source.GetEnumerator())
             {
-                if (enumerator.MoveNext())
+                if (!enumerator.MoveNext())
                 {
-                    using (var enumerableAdapter = enumerator.AsEnumerableInternal())
-                    {
-                        action(enumerableAdapter.Prepend(enumerator.Current));
-                    }
-
-                    return true;
+                    return false;
                 }
-            }
 
-            return false;
+                using (var enumerableAdapter = enumerator.AsEnumerableInternal())
+                {
+                    action(enumerableAdapter.Prepend(enumerator.Current));
+                }
+
+                return true;
+            }
         }
     }
 }
