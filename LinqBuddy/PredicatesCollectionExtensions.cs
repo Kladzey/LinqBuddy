@@ -47,23 +47,21 @@ namespace Kladzey.LinqBuddy
             Expression<Func<T, bool>> defaultValue,
             Func<Expression, Expression, Expression> aggregateSelector)
         {
-            using (var enumerator = predicates.GetEnumerator())
+            using var enumerator = predicates.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (!enumerator.MoveNext())
-                {
-                    return defaultValue;
-                }
-
-                var first = enumerator.Current;
-
-                var expression = enumerator
-                    .AsEnumerableInternal()
-                    .Prepend(first)
-                    .SelectBodiesWithUnitedParametersInternal()
-                    .AggregateInternal(aggregateSelector);
-
-                return Expression.Lambda<Func<T, bool>>(expression, first.Parameters);
+                return defaultValue;
             }
+
+            var first = enumerator.Current.ArgumentItemCannotBeNull(nameof(predicates));
+
+            var expression = enumerator
+                .AsEnumerableInternal()
+                .Prepend(first)
+                .SelectBodiesWithUnitedParametersInternal()
+                .AggregateInternal(aggregateSelector);
+
+            return Expression.Lambda<Func<T, bool>>(expression, first.Parameters);
         }
     }
 }

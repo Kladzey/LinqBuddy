@@ -75,14 +75,12 @@ namespace Kladzey.LinqBuddy.Visitors
             switch (node.Arguments[0])
             {
                 // variable
-                case MemberExpression memberExpression
-                    when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is ConstantExpression constantExpression:
+                case MemberExpression {Member: FieldInfo fieldInfo, Expression: ConstantExpression constantExpression}:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(constantExpression.Value);
                     break;
 
                 // static field
-                case MemberExpression memberExpression
-                    when memberExpression.Member is FieldInfo fieldInfo && memberExpression.Expression is null:
+                case MemberExpression {Member: FieldInfo fieldInfo, Expression: null}:
                     calledExpression = (LambdaExpression)fieldInfo.GetValue(null);
                     break;
 

@@ -36,7 +36,7 @@ namespace Kladzey.LinqBuddy.Adapters
             return new EnumeratorWrapper(this);
         }
 
-        private struct EnumeratorWrapper : IEnumerator<T>
+        private readonly struct EnumeratorWrapper : IEnumerator<T>
         {
             private readonly EnumerableAdapter<T> _enumerableAdapter;
 

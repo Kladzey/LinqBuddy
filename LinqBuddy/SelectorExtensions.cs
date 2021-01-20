@@ -60,7 +60,7 @@ namespace Kladzey.LinqBuddy
                         }
                         break;
 
-                    case ExpressionType.Constant when node is ConstantExpression constantExpression && constantExpression.Value != null:
+                    case ExpressionType.Constant when node is ConstantExpression {Value: { }} constantExpression:
                         result.Add(
                             (TOutput)constantExpression.Value,
                             predicate != null ? Expression.Lambda<Func<TInput, bool>>(predicate, expression.Parameters) : Predicates.True<TInput>());

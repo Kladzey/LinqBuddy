@@ -33,35 +33,33 @@ namespace Kladzey.LinqBuddy
         internal static Expression AggregateInternal(this IEnumerable<Expression> expressions, Func<Expression, Expression, Expression> aggregateSelector)
         {
             var stack = new Stack<Expression>();
-            using (var enumerator = expressions.GetEnumerator())
+            using var enumerator = expressions.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (!enumerator.MoveNext())
-                {
-                    throw new ArgumentException("Expressions is empty.", nameof(expressions));
-                }
+                throw new ArgumentException("Expressions is empty.", nameof(expressions));
+            }
 
-                var first = enumerator.Current;
-                stack.Push(first);
-                var count = 1;
-                while (enumerator.MoveNext())
-                {
-                    ++count;
-                    stack.Push(enumerator.Current);
+            var first = enumerator.Current;
+            stack.Push(first);
+            var count = 1;
+            while (enumerator.MoveNext())
+            {
+                ++count;
+                stack.Push(enumerator.Current);
 
-                    var countZeroBits = CountZeroBits(count);
-                    for (var i = 0; i < countZeroBits; ++i)
-                    {
-                        AggregateLastTwo();
-                    }
-                }
-
-                while (stack.Count > 1)
+                var countZeroBits = CountZeroBits(count);
+                for (var i = 0; i < countZeroBits; ++i)
                 {
                     AggregateLastTwo();
                 }
-
-                return stack.Pop();
             }
+
+            while (stack.Count > 1)
+            {
+                AggregateLastTwo();
+            }
+
+            return stack.Pop();
 
             void AggregateLastTwo()
             {

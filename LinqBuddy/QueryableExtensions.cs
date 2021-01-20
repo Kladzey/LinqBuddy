@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Kladzey.LinqBuddy.Visitors;
 
 namespace Kladzey.LinqBuddy
@@ -18,10 +19,12 @@ namespace Kladzey.LinqBuddy
         {
             if (source == null)
             {
-                throw new System.ArgumentNullException(nameof(source));
+                throw new ArgumentNullException(nameof(source));
             }
 
-            return (IQueryable<T>)source.Provider.CreateQuery(InlineCallsVisitor.Instance.Visit(source.Expression));
+            return (IQueryable<T>)source.Provider.CreateQuery(
+                InlineCallsVisitor.Instance.Visit(source.Expression) ??
+                throw new InvalidOperationException("Cannot create expression."));
         }
     }
 }

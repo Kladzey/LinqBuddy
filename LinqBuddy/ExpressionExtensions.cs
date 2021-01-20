@@ -76,7 +76,7 @@ namespace Kladzey.LinqBuddy
         }
 
         /// <summary>
-        /// Replace multiple parameters by items in <paramref name="newExpressions"/>.
+        /// Replace multiple parameters by items in <paramref name="replacements"/>.
         /// </summary>
         /// <param name="expression">The expression.</param>
         /// <param name="parameters"></param>
@@ -103,21 +103,25 @@ namespace Kladzey.LinqBuddy
             }
 
             var newExpressions = new Dictionary<ParameterExpression, Expression>();
-            using (var parametersEnumerator = parameters.GetEnumerator())
-            using (var replacementsEnumerator = replacements.GetEnumerator())
+            
+            using var parametersEnumerator = parameters.GetEnumerator();
+            using var replacementsEnumerator = replacements.GetEnumerator();
+            
+            var parametersMoveNext = parametersEnumerator.MoveNext();
+            var replacementsMoveNext = replacementsEnumerator.MoveNext();
+            while (parametersMoveNext && replacementsMoveNext)
             {
-                var parametersMoveNext = parametersEnumerator.MoveNext();
-                var replacementsMoveNext = replacementsEnumerator.MoveNext();
-                while (parametersMoveNext && replacementsMoveNext)
-                {
-                    newExpressions.Add(parametersEnumerator.Current, replacementsEnumerator.Current);
-                    parametersMoveNext = parametersEnumerator.MoveNext();
-                    replacementsMoveNext = replacementsEnumerator.MoveNext();
-                }
-                if (parametersMoveNext != replacementsMoveNext)
-                {
-                    throw new InvalidOperationException("The number of replacements is not equal to the number of parameters.");
-                }
+                newExpressions.Add(
+                    parametersEnumerator.Current.ArgumentItemCannotBeNull(nameof(parameters)),
+                    replacementsEnumerator.Current.ArgumentItemCannotBeNull(nameof(parameters)));
+                parametersMoveNext = parametersEnumerator.MoveNext();
+                replacementsMoveNext = replacementsEnumerator.MoveNext();
+            }
+
+            if (parametersMoveNext != replacementsMoveNext)
+            {
+                throw new InvalidOperationException(
+                    "The number of replacements is not equal to the number of parameters.");
             }
 
             return new ReplaceParametersVisitor(newExpressions).Visit(expression);

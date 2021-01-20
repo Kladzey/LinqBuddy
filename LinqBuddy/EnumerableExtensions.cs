@@ -41,20 +41,16 @@ namespace Kladzey.LinqBuddy
                 return true;
             }
 
-            using (var enumerator = source.GetEnumerator())
+            using var enumerator = source.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (!enumerator.MoveNext())
-                {
-                    return false;
-                }
-
-                using (var enumerableAdapter = enumerator.AsEnumerableInternal())
-                {
-                    action(enumerableAdapter.Prepend(enumerator.Current));
-                }
-
-                return true;
+                return false;
             }
+
+            using var enumerableAdapter = enumerator.AsEnumerableInternal();
+            action(enumerableAdapter.Prepend(enumerator.Current));
+
+            return true;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Kladzey.LinqBuddy
@@ -28,19 +27,20 @@ namespace Kladzey.LinqBuddy
 
         internal static IEnumerable<Expression> SelectBodiesWithUnitedParametersInternal<TDelegate>(this IEnumerable<Expression<TDelegate>> expressions)
         {
-            using (var enumerator = expressions.GetEnumerator())
+            using var enumerator = expressions.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (!enumerator.MoveNext())
-                {
-                    yield break;
-                }
+                yield break;
+            }
 
-                var firstParameters = enumerator.Current.Parameters;
-                yield return enumerator.Current.Body;
-                while (enumerator.MoveNext())
-                {
-                    yield return enumerator.Current.Body.ReplaceParameters(enumerator.Current.Parameters, firstParameters.Cast<Expression>());
-                }
+            var firstItem = enumerator.Current.ArgumentItemCannotBeNull(nameof(expressions));
+            var firstParameters = firstItem.Parameters;
+            yield return firstItem.Body;
+                
+            while (enumerator.MoveNext())
+            {
+                var currentItem = enumerator.Current.ArgumentItemCannotBeNull(nameof(expressions));
+                yield return currentItem.Body.ReplaceParameters(currentItem.Parameters, firstParameters);
             }
         }
     }
