@@ -15,7 +15,7 @@ namespace Kladzey.LinqBuddy
         /// </summary>
         /// <param name="memberName">Name of member with expression. It should be public static filed or property.</param>
         /// <param name="type">Specify type if member is not in declaring type.</param>
-        public CallExpressionAttribute(string memberName = null, Type type = null)
+        public CallExpressionAttribute(string? memberName = null, Type? type = null)
         {
             MemberName = memberName;
             Type = type;
@@ -24,15 +24,15 @@ namespace Kladzey.LinqBuddy
         /// <summary>
         /// Name of member with expression.
         /// </summary>
-        public string MemberName { get; }
+        public string? MemberName { get; }
 
         /// <summary>
         /// Type what contains member.
         /// </summary>
-        public Type Type { get; }
+        public Type? Type { get; }
 
         /// <inheritdoc />
-        public LambdaExpression GetExpression(MemberInfo memberInfo)
+        public LambdaExpression? GetExpression(MemberInfo memberInfo)
         {
             if (memberInfo == null)
             {
@@ -50,7 +50,7 @@ namespace Kladzey.LinqBuddy
             }
 
             var propertyInfo = typeInfo.GetProperty(memberName, BindingFlags.Public | BindingFlags.Static);
-            return (LambdaExpression) propertyInfo?.GetValue(null);
+            return (LambdaExpression?)propertyInfo?.GetValue(null);
         }
     }
 }

@@ -16,16 +16,14 @@ namespace Kladzey.LinqBuddy.Visitors
 
         protected override Expression VisitMember(MemberExpression node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
             var expressionAttribute = node.Member
                 .GetCustomAttributes()
                 .OfType<IExpressionProvider>()
                 .FirstOrDefault();
-            if (expressionAttribute != null)
-            {
-                return VisitCallAttribute(node, expressionAttribute);
-            }
-
-            return base.VisitMember(node);
+            return expressionAttribute != null 
+                ? VisitCallAttribute(node, expressionAttribute) 
+                : base.VisitMember(node);
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
@@ -66,7 +64,7 @@ namespace Kladzey.LinqBuddy.Visitors
                 throw new InvalidOperationException("Expression is not found.");
             }
 
-            return Visit(expression.Body.ReplaceParameters(expression.Parameters, arguments));
+            return Visit(expression.Body.ReplaceParameters(expression.Parameters, arguments))!;
         }
 
         private Expression VisitExpressionCall(MethodCallExpression node)
@@ -89,7 +87,7 @@ namespace Kladzey.LinqBuddy.Visitors
                     break;
             }
 
-            return Visit(calledExpression.Body.ReplaceParameters(calledExpression.Parameters, node.Arguments.Skip(1)));
+            return Visit(calledExpression.Body.ReplaceParameters(calledExpression.Parameters, node.Arguments.Skip(1)))!;
         }
     }
 }

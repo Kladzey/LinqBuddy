@@ -23,7 +23,7 @@ namespace Kladzey.LinqBuddy.Tests
                 // Then
                 act.Should()
                     .Throw<ObjectDisposedException>()
-                    .WithMessage("This enumerator can be enumerated only once.");
+                    .WithMessage("This enumerator can be enumerated only once.*");
             }
         }
 
@@ -43,7 +43,7 @@ namespace Kladzey.LinqBuddy.Tests
                 {
                     act.Should()
                         .Throw<ObjectDisposedException>()
-                        .WithMessage("This enumerator can be enumerated only once.");
+                        .WithMessage("This enumerator can be enumerated only once.*");
                     listResult.Should().BeEquivalentTo(Enumerable.Range(0, 10));
                 }
             }

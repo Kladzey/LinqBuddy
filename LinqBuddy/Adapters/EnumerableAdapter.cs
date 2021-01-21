@@ -16,7 +16,7 @@ namespace Kladzey.LinqBuddy.Adapters
 
         internal EnumerableAdapter(IEnumerator<T> enumerator)
         {
-            _enumerator = enumerator;
+            _enumerator = enumerator ?? throw new ArgumentNullException(nameof(enumerator));
         }
 
         /// <inheritdoc />
@@ -47,7 +47,7 @@ namespace Kladzey.LinqBuddy.Adapters
 
             public T Current => _enumerableAdapter._enumerator.Current;
 
-            object IEnumerator.Current => ((IEnumerator)_enumerableAdapter._enumerator).Current;
+            object? IEnumerator.Current => ((IEnumerator)_enumerableAdapter._enumerator).Current;
 
             public void Dispose()
             {
@@ -58,7 +58,9 @@ namespace Kladzey.LinqBuddy.Adapters
             {
                 if (_enumerableAdapter._isDisposed)
                 {
-                    throw new ObjectDisposedException("This enumerator can be enumerated only once.", (Exception)null);
+                    throw new ObjectDisposedException(
+                        "enumerableAdapter",
+                        "This enumerator can be enumerated only once.");
                 }
 
                 return _enumerableAdapter._enumerator.MoveNext();

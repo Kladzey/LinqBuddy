@@ -124,7 +124,7 @@ namespace Kladzey.LinqBuddy
                     "The number of replacements is not equal to the number of parameters.");
             }
 
-            return new ReplaceParametersVisitor(newExpressions).Visit(expression);
+            return new ReplaceParametersVisitor(newExpressions).Visit(expression)!;
         }
     }
 }

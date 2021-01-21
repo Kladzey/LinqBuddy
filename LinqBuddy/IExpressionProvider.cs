@@ -13,6 +13,6 @@ namespace Kladzey.LinqBuddy
         /// </summary>
         /// <param name="memberInfo">Member info.</param>
         /// <returns>Expression or <value>null</value> when expression is not found.</returns>
-        LambdaExpression GetExpression(MemberInfo memberInfo);
+        LambdaExpression? GetExpression(MemberInfo memberInfo);
     }
 }

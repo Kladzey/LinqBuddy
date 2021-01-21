@@ -9,6 +9,7 @@
     <Authors>Kladzey</Authors>
     <PackageProjectUrl>https://github.com/Kladzey/LinqBuddy</PackageProjectUrl>
     <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

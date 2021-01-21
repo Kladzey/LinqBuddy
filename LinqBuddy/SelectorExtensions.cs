@@ -43,7 +43,7 @@ namespace Kladzey.LinqBuddy
 
             return result;
 
-            void Visit(Expression node, Expression predicate)
+            void Visit(Expression node, Expression? predicate)
             {
                 switch (node.NodeType)
                 {
