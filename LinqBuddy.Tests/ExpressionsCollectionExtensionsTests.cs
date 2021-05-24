@@ -17,7 +17,7 @@ namespace Kladzey.LinqBuddy.Tests
             // Then
             act.Should()
                 .Throw<ArgumentException>()
-                .WithMessage("Expressions is empty.\r\nParameter name: expressions");
+                .WithMessage("Expressions is empty*");
         }
 
         [Fact]
